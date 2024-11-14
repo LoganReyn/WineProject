@@ -119,6 +119,7 @@ def label_prediction(mlModel,
 
 
 if __name__ == "__main__":
+    # quick tests
     va = VolatileAcidity(1.58, 0.12, 1.58)
     slph = Sulphates(1, 0.33, 2)
     alc = Alchohol(10, 8.4, 14.9)
