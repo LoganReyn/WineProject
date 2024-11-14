@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Quality Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+    <h1>Wine Quality Prediction</h1>
+
+    <form id="predictionForm">
+        <label for="volatile_acidity">Volatile Acidity: </label>
+        <input type="range" id="volatile_acidity" name="volatile_acidity" min="0.0" max="2.0" step="0.01" value="1.0" oninput="updateValue('vaValue', this.value)">
+        <span id="vaValue">1.0</span><br><br>
+
+        <label for="sulphates">Sulphates: </label>
+        <input type="range" id="sulphates" name="sulphates" min="0.0" max="2.0" step="0.01" value="1.0" oninput="updateValue('sulValue', this.value)">
+        <span id="sulValue">1.0</span><br><br>
+
+        <label for="alcohol">Alcohol: </label>
+        <input type="range" id="alcohol" name="alcohol" min="5.0" max="15.0" step="0.1" value="10.0" oninput="updateValue('alcValue', this.value)">
+        <span id="alcValue">10.0</span><br><br>
+
+        <button type="button" onclick="submitData()">Predict Wine Quality</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script src="{{ url_for('static', path='js/script.js') }}"></script>
+</body>
+</html>
