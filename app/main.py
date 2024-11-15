@@ -6,10 +6,10 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
+from pydantic import BaseModel
 from sklearn.ensemble import RandomForestClassifier
 
-from .transformations import wine_data, label_prediction
+from transformations import wine_data, label_prediction
 
 ####################################################################################
 # configurations
@@ -26,16 +26,22 @@ app.mount("/static", StaticFiles(directory='app/static'), name='static')
 with open(f"{FILE_NAME}", 'rb') as file:
     model: RandomForestClassifier = pickle.load(file)
 
+class WineData(BaseModel):
+    volatile_acidity: float
+    sulphates: float
+    alcohol: float
+
+
 @app.get("/", response_class=HTMLResponse)
 async def get_form(request: Request):
     """ Serve the index page with sliders """
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.post("/")
-async def predict_wine_quality(volatile_acidity: float, sulphates: float, alcohol: float):
+@app.post("/predict")
+async def predict_wine_quality(data: WineData):
     """ Get wine data from the sliders and predict quality """
-    data = wine_data(volatile_acidity, sulphates, alcohol)
-    prediction = label_prediction(model, data)
+    data_array = wine_data(data.volatile_acidity, data.sulphates, data.alcohol)
+    prediction = label_prediction(model, data_array)
     return {"prediction": prediction}
 
 
