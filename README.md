@@ -1,4 +1,31 @@
-## Development 
+## Installation  
+
+For Windows
+
+#### 1. Setup Python Virtual Environment 
+```bash
+# create in current working directory
+python -m venv .venv
+
+# activate the venv
+.venv\Scripts\activate
+
+# use requirements.txt to install necessary libraries
+pip install -r requirmenets.txt
+```
+
+#### 2. Install Dependancies Using 'requirements.txt'
+```bash
+# use requirements.txt to install necessary libraries
+pip install -r requirmenets.txt
+```
+
+
+#### 3. Run From CLI
+```bash
+# navigate to url after running 
+fastapi dev app/main.py
+```
 
 ### Prerequsite 
 ```bash
@@ -6,7 +33,7 @@
 pip install fastapi[standard]
 ```
 
-### CLI
+### Use FastAPI CLI
 ```bash
 # run app and see updates in realtime after CNTRL + S on file
 fastapi dev <path_to_FastAPI()>
