@@ -1,4 +1,4 @@
-# Wine Quality Deployment 
+# Wine Quality Model Deployment 
 
 ## Table of Contents
 1. [Demo](#demo)  
@@ -11,7 +11,6 @@
 
 
 ## Demo
-Video Demonstration of Product
 https://github.com/user-attachments/assets/7b55ef73-eb9b-48f1-9c0a-9bc6acce0050
 
 
