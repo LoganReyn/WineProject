@@ -2,6 +2,7 @@
 Logan Reynolds
 
 
+## Development 
 ```bash
 # install fastapi with ability to use dev
 pip install fastapi[standard]
