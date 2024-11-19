@@ -14,13 +14,13 @@ from transformations import wine_data, label_prediction
 ####################################################################################
 # configurations
 app = FastAPI()
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory="app/ui")
 FILE_NAME = os.path.join(os.path.dirname(__file__), 'random_forest.pkl')
 warnings.filterwarnings("ignore")
 ####################################################################################
 
 
-app.mount("/static", StaticFiles(directory='app/static'), name='static')
+app.mount("/ui", StaticFiles(directory='app/ui'), name='static')
 
 # open pickle file containing model
 with open(f"{FILE_NAME}", 'rb') as file:

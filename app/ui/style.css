@@ -172,12 +172,14 @@ input[type="range"]::-webkit-slider-thumb:hover {
     justify-content: center;
 }
 
-#model-container {
+#threejs-container {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 600px; /* Ensure it takes enough vertical space */
+    position: relative;
 }
 
 .placeholder-text {

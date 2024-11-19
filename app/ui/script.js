@@ -1,3 +1,7 @@
+/* 
+Program for user interaction on UI
+*/
+
 // Update the display for the current slider values
 function updateValue(id, value) {
     const element = document.getElementById(id);
