@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wine Quality Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
     <!-- 3js CDN from npm. Version 17-->
     <script type="importmap">
         {
@@ -74,10 +74,10 @@
         </div>
 
         <!-- Right panel for 3D visualization -->
-        <div class="visualization-panel", id="threejs-container">
+        <div class="visualization-panel" id="threejs-container">
         </div>
     </div>
     <script src="{{ url_for('static', path='/script.js') }}"></script>
-    <script src="{{ url_for('static', path='/test.js') }}", type="module"></script>
+    <script src="{{ url_for('static', path='/wineModel.js') }}", type="module"></script>
 </body>
 </html>

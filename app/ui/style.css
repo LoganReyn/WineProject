@@ -164,7 +164,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 /* Visualization Panel Styles */
 .visualization-panel {
     flex: 1;
-    background-color: var(--panel-color);
+    background-color: var(--background-color);
     border-radius: var(--border-radius);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -178,7 +178,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 600px; /* Ensure it takes enough vertical space */
     position: relative;
 }
 

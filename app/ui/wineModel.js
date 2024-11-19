@@ -11,7 +11,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1, 
   1000
 );
-camera.position.z = 5;
+
+camera.position.z = 10;
 
 // Add lights
 const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
@@ -50,7 +51,7 @@ loader.load(
     const distance = maxDim / (2 * Math.tan(fov / 2));
     const aspectRatio = container.clientWidth / container.clientHeight;
 
-    camera.position.z = distance; // Position camera to fit model
+    camera.position.z = distance + 3; // Position camera to fit model
     camera.aspect = aspectRatio;
     camera.updateProjectionMatrix();
 
