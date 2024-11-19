@@ -27,7 +27,7 @@ pip install -r requirmenets.txt
 fastapi dev app/main.py
 ```
 ![image](https://github.com/user-attachments/assets/efd05761-bc77-405e-a697-57170453018e)
-Should see something similar 
+<figcaption> Should see something similar </figcaption>
 
 ### Prerequsite 
 ```bash
