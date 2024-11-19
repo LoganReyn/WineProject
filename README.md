@@ -28,18 +28,4 @@ fastapi dev app/main.py
 ```
 ![image](https://github.com/user-attachments/assets/efd05761-bc77-405e-a697-57170453018e)
 <figcaption> Should see something similar </figcaption>
-
-### Prerequsite 
-```bash
-# install fastapi with ability to use dev
-pip install fastapi[standard]
-```
-
-### Use FastAPI CLI
-```bash
-# run app and see updates in realtime after CNTRL + S on file
-fastapi dev <path_to_FastAPI()>
-
-# example: if 'app = FastAPI()' declared in 'main.py' and stored in directory 'app'
-fastapi dev app/main.py
 ```
