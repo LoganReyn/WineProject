@@ -26,6 +26,7 @@ pip install -r requirmenets.txt
 # navigate to url after running 
 fastapi dev app/main.py
 ```
+![image](https://github.com/user-attachments/assets/efd05761-bc77-405e-a697-57170453018e)
 
 ### Prerequsite 
 ```bash
