@@ -14,6 +14,3 @@ fastapi dev <path_to_FastAPI()>
 # example: if 'app = FastAPI()' declared in 'main.py' and stored in directory 'app'
 fastapi dev app/main.py
 ```
-
-
-adsf
