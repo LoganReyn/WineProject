@@ -1,4 +1,4 @@
-# Wine Quality Deployment 
+# Wine Quality Model Deployment 
 
 ## Table of Contents
 1. [Demo](#demo)  
