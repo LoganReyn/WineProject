@@ -1,103 +1,210 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// Set up the scene
-const scene = new THREE.Scene();
+class WineVisualizer {
+    constructor(containerId) {
+        this.containerId = containerId;
+        this.container = null;
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.wineGlass = null;
+        this.isInitialized = false;
+        this.initializationAttempts = 0;
+        this.maxAttempts = 5;
+    }
 
-// Set up the camera
-const camera = new THREE.PerspectiveCamera(
-  30, 
-  window.innerWidth / window.innerHeight, 
-  0.1, 
-  1000
-);
+    async initialize() {
+        this.container = document.getElementById(this.containerId);
+        
+        if (!this.container) {
+            console.error('Container not found');
+            return;
+        }
 
-camera.position.z = 10;
+        // Check if container has dimensions
+        if (!this.container.clientWidth || !this.container.clientHeight) {
+            if (this.initializationAttempts < this.maxAttempts) {
+                this.initializationAttempts++;
+                console.log(`Attempt ${this.initializationAttempts}: Waiting for container dimensions...`);
+                setTimeout(() => this.initialize(), 200);
+                return;
+            } else {
+                console.error('Container dimensions not available after maximum attempts');
+                return;
+            }
+        }
 
-// Add lights
-const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
-scene.add(ambientLight);
+        // Initialize Three.js components
+        this.setupScene();
+        this.setupCamera();
+        this.setupRenderer();
+        await this.loadModel();
+        this.setupLights();
+        this.setupEventListeners();
+        
+        // Start animation loop
+        this.isInitialized = true;
+        this.animate();
+    }
 
-const pointLight = new THREE.PointLight(0xff0000, 1, 100); // Red point light
-pointLight.position.set(0, 5, 10);
-scene.add(pointLight);
+    setupScene() {
+        this.scene = new THREE.Scene();
+    }
 
-// Set up the WebGL renderer
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-const container = document.getElementById('threejs-container');
-renderer.setSize(container.clientWidth, container.clientHeight);
-container.appendChild(renderer.domElement);
+    setupCamera() {
+        const aspect = this.container.clientWidth / this.container.clientHeight;
+        this.camera = new THREE.PerspectiveCamera(30, aspect, 0.1, 1000);
+        this.camera.position.z = 10;
+    }
 
-// Load the GLTF model
-const loader = new GLTFLoader();
-let wineGlass;
+    setupRenderer() {
+        this.renderer = new THREE.WebGLRenderer({
+            alpha: true,
+            antialias: true,
+            powerPreference: "high-performance"
+        });
+        
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // Clear existing content
+        while (this.container.firstChild) {
+            this.container.removeChild(this.container.firstChild);
+        }
+        
+        this.container.appendChild(this.renderer.domElement);
+    }
 
-loader.load(
-  'ui/wine_bottle.glb',
-  function (gltf) {
-    wineGlass = gltf.scene;
+    setupLights() {
+        const ambientLight = new THREE.AmbientLight(0x404040, 1);
+        this.scene.add(ambientLight);
 
-    // Calculate the bounding box of the model
-    const boundingBox = new THREE.Box3().setFromObject(wineGlass);
-    const size = boundingBox.getSize(new THREE.Vector3());
-    const center = boundingBox.getCenter(new THREE.Vector3());
+        const pointLight = new THREE.PointLight(0xff0000, 1, 100);
+        pointLight.position.set(0, 5, 10);
+        this.scene.add(pointLight);
+    }
 
-    // Reposition the model to center it
-    wineGlass.position.set(-center.x, -center.y, -center.z);
+    async loadModel() {
+        return new Promise((resolve, reject) => {
+            const loader = new GLTFLoader();
+            
+            loader.load(
+                'ui/wine_bottle.glb',
+                (gltf) => {
+                    this.wineGlass = gltf.scene;
+                    
+                    const boundingBox = new THREE.Box3().setFromObject(this.wineGlass);
+                    const size = boundingBox.getSize(new THREE.Vector3());
+                    const center = boundingBox.getCenter(new THREE.Vector3());
 
-    // Scale the model to fit the container
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const fov = camera.fov * (Math.PI / 180); // Convert FOV to radians
-    const distance = maxDim / (2 * Math.tan(fov / 2));
-    const aspectRatio = container.clientWidth / container.clientHeight;
+                    this.wineGlass.position.set(-center.x, -center.y, -center.z);
 
-    camera.position.z = distance + 3; // Position camera to fit model
-    camera.aspect = aspectRatio;
-    camera.updateProjectionMatrix();
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const fov = this.camera.fov * (Math.PI / 180);
+                    const distance = maxDim / (2 * Math.tan(fov / 2));
 
-    scene.add(wineGlass); // Add the model to the scene
-  },
-  function (xhr) {
-    console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-  },
-  function (error) {
-    console.log('An error happened', error);
-  }
-);
+                    this.camera.position.z = distance + 3;
+                    this.camera.updateProjectionMatrix();
+                    
+                    this.scene.add(this.wineGlass);
+                    resolve();
+                },
+                undefined,
+                (error) => {
+                    console.error('Error loading model:', error);
+                    reject(error);
+                }
+            );
+        });
+    }
 
-// Resize renderer and update camera aspect ratio
-function resizeRendererToDisplaySize() {
-  const width = container.clientWidth;
-  const height = container.clientHeight;
-  const needResize = renderer.domElement.width !== width || renderer.domElement.height !== height;
+    setupEventListeners() {
+        let resizeTimeout;
+        
+        const handleResize = () => {
+            if (!this.container || !this.renderer || !this.camera) return;
 
-  if (needResize) {
-    renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }
+            if (resizeTimeout) {
+                clearTimeout(resizeTimeout);
+            }
 
-  return needResize;
+            resizeTimeout = setTimeout(() => {
+                const width = this.container.clientWidth;
+                const height = this.container.clientHeight;
+
+                if (width && height) {
+                    this.renderer.setSize(width, height, false);
+                    this.camera.aspect = width / height;
+                    this.camera.updateProjectionMatrix();
+                }
+            }, 250);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        // Handle visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && !this.isInitialized) {
+                this.initialize();
+            }
+        });
+    }
+
+    animate() {
+        if (!this.isInitialized) return;
+
+        if (this.wineGlass) {
+            this.wineGlass.rotation.y += 0.01;
+        }
+
+        this.renderer.render(this.scene, this.camera);
+        requestAnimationFrame(() => this.animate());
+    }
+
+    dispose() {
+        if (this.renderer) {
+            this.renderer.dispose();
+            this.renderer = null;
+        }
+        
+        if (this.wineGlass) {
+            this.scene.remove(this.wineGlass);
+            this.wineGlass.traverse((node) => {
+                if (node.isMesh) {
+                    node.geometry.dispose();
+                    node.material.dispose();
+                }
+            });
+            this.wineGlass = null;
+        }
+        
+        this.isInitialized = false;
+    }
 }
 
-// Animation loop with spin
-function animate() {
-  resizeRendererToDisplaySize();
-  
-  if (wineGlass) {
-    // Add rotation to the model for the spin effect
-    wineGlass.rotation.y += 0.01; // Rotate 0.01 radians per frame (adjust speed as desired)
-  }
-  
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-}
+// Wait for page load before initializing
+document.addEventListener('DOMContentLoaded', () => {
+    const visualizer = new WineVisualizer('threejs-container');
+    
+    // Add a mutation observer to watch for container changes
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && 
+                mutation.attributeName === 'style') {
+                visualizer.initialize();
+            }
+        });
+    });
 
-animate();
+    const container = document.getElementById('threejs-container');
+    if (container) {
+        observer.observe(container, {
+            attributes: true,
+            attributeFilter: ['style']
+        });
+    }
 
-// Update renderer size and camera on window resize
-window.addEventListener('resize', () => {
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
+    // Initial initialization attempt
+    setTimeout(() => visualizer.initialize(), 100);
 });
