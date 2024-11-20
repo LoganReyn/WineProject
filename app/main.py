@@ -9,7 +9,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sklearn.ensemble import RandomForestClassifier
 
-from transformations import (wine_data, 
+from .transformations import (wine_data, 
                              label_prediction)
 
 ####################################################################################
