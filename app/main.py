@@ -3,13 +3,14 @@ import warnings
 import os
 
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from sklearn.ensemble import RandomForestClassifier
 
-from transformations import wine_data, label_prediction
+from transformations import (wine_data, 
+                             label_prediction)
 
 ####################################################################################
 # configurations
@@ -43,6 +44,11 @@ async def predict_wine_quality(data: WineData):
     data_array = wine_data(data.volatile_acidity, data.sulphates, data.alcohol)
     prediction = label_prediction(model, data_array)
     return {"prediction": prediction}
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    """ Serve the favicon """
+    return FileResponse("app/ui/favicon.ico")
 
 
 if __name__ == "__main__":
