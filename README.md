@@ -20,7 +20,7 @@ These predictions come from a Random-Forest model based on a wine quality datase
 [Kaggle](https://www.kaggle.com/datasets/yasserh/wine-quality-dataset). After attempting to model my own wine bottle
 in Blender, I realized I could get a free one online.
 
-In the future, it would be interesting to add animation based on the prediction. Also, finishing my own models would be 
+In the future, it would be interesting to add animation based on the prediction. Also, finishing my own 3D model would be 
 cool too. 
 
 ## Installation  
