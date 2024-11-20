@@ -8,6 +8,7 @@
     2. [Setup Python Virtual Environment](#2-setup-python-virtual-environment)  
     3. [Install Dependencies Using 'requirements.txt'](#3-install-dependencies-using-requirementstxt)  
     4. [Run Locally Using FastAPI](#4-run-locally-using-fastapi)
+4. [Docker](#docker)
 
 
 ## Demo
@@ -60,12 +61,26 @@ pip install -r requirmenets.txt
 ```bash
 # navigate to url after running 
 fastapi dev app/main.py
-
-
-
-## there is an issue 'using fastapi run'. The 3D model doesn't render
-## why this is, I don't know.
 ```
 
 ![image](https://github.com/user-attachments/assets/efd05761-bc77-405e-a697-57170453018e)
 <figcaption> ^ Should see something similar </figcaption>
+
+## Docker
+
+*Docker Setup Instructions*
+
+#### 1. Build Docker Image
+```PS 
+# should have docker desktop open before running
+docker build -t wine .
+```
+
+#### 2. Build Docker Container
+```PS
+docker run --name wineapp -p 8000:8000 wine
+```
+
+#### 3. Launch Container in Future
+- Building the Container in Step 2 starts the program
+- To run in the future, navigate to 'Containers' in Docker Desktop and click the play button under 'Actions'
