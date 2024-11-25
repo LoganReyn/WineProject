@@ -78,7 +78,6 @@ fastapi dev app/main.py
 
 ![image](https://github.com/user-attachments/assets/33133e91-4804-4925-bae5-b569dc20f646)
 
-
 <figcaption> ^ Should see something similar </figcaption>
 
 ## Docker
